@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <h2 class="join-message">Edit Your Profile.</h2>
+      <form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+
+        <!-- Display form fields except the password -->
+        {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+          <div class="form-group">
+            <label for="{{ field.id }}">{{ field.label.text }}</label>
+            {{ field(class="form-control") }}
+            {% for error in field.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <!-- Request current password for confirmation -->
+        <p>To confirm changes, enter your password:</p>
+        <div class="form-group">
+          {% if form.password.errors %}
+            {% for error in form.password.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
+        </div>
+
+        <!-- Update and Cancel buttons -->
+        <div class="edit-btn-area">
+          <button class="btn btn-success">Update Profile</button>
+          <a href="/users/{{ g.user.id }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
